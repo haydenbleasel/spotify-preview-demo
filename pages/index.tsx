@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { createGlobalState } from 'react-hooks-global-state';
 import { decode } from 'he';
 import { ArrowUpRight } from 'react-feather';
+import Link from 'next/link';
 import type { SpotifyTrack, SpotifyPlaylist } from '../types/spotify';
 import { getPlaylist } from '../utils/spotify';
 
@@ -230,6 +231,22 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
         </a>
       </div>
       <div>{tracks.map(Track)}</div>
+      <div className="fixed top-4 right-4 h-8 w-8 overflow-hidden rounded-full transition-transform hover:-translate-y-1">
+        <Link href="https://twitter.com/haydenbleasel">
+          <a
+            href="https://twitter.com/haydenbleasel"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="/hayden.jpeg"
+              width={32}
+              height={32}
+              alt="Follow me on Twitter"
+            />
+          </a>
+        </Link>
+      </div>
     </div>
   );
 };
