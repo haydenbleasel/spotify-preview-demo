@@ -193,7 +193,9 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
   return (
     <div className="container mx-auto grid max-w-2xl gap-8 py-24 px-4">
       <div className="grid gap-4">
-        <h1 className="text-3xl font-semibold">{data.name}</h1>
+        <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">
+          {data.name}
+        </h1>
         <p className="text-md font-normal text-gray-900 dark:text-white">
           <span>{decode(description)} </span>
           <span>Featuring {formatter.format(topArtists)}.</span>
