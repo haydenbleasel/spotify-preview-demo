@@ -5,9 +5,9 @@ import { Fragment, useState } from 'react';
 import toast from 'react-hot-toast';
 import { createGlobalState } from 'react-hooks-global-state';
 import { decode } from 'he';
+import { ArrowUpRight } from 'react-feather';
 import type { SpotifyTrack, SpotifyPlaylist } from '../types/spotify';
 import { getPlaylist } from '../utils/spotify';
-import { ArrowUpRight } from 'react-feather';
 
 type PlaylistProps = {
   data: SpotifyPlaylist;
@@ -128,10 +128,11 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
           <div
             className={`
             absolute left-0 top-0 h-full bg-gray-100 dark:bg-gray-800
-            ${audio && interactable
+            ${
+              audio && interactable
                 ? 'w-full transition-all duration-[30s] ease-linear'
                 : 'w-0'
-              }
+            }
           `}
           />
         )}
@@ -181,7 +182,7 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
     : `${data.description}.`;
 
   return (
-    <div className="container max-w-2xl py-24 px-4 grid gap-8 mx-auto">
+    <div className="container mx-auto grid max-w-2xl gap-8 py-24 px-4">
       <div className="grid gap-4">
         <h1 className="text-3xl font-semibold">{data.name}</h1>
         <p className="text-md font-normal text-gray-900 dark:text-white">
@@ -197,7 +198,10 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
         </p>
       </div>
       <div>
-        <a className="py-3 px-5 rounded-md bg-[#1DB965] text-white inline-flex items-center gap-2" href={data.external_urls.spotify}>
+        <a
+          className="inline-flex items-center gap-2 rounded-md bg-[#1DB965] py-3 px-5 text-white"
+          href={data.external_urls.spotify}
+        >
           <Image src="/spotify.svg" width={16} height={16} alt="" />
           <span>Open in Spotify</span>
           <ArrowUpRight size={16} />
