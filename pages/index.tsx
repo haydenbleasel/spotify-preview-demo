@@ -163,10 +163,12 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
   );
 };
 
-const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
-  const duration = (
+const getPlaylistDuration = (tracks: SpotifyTrack[]) =>
+  (
     tracks.reduce((acc, track) => acc + track.track.duration_ms, 0) / 3600000
   ).toFixed(1);
+
+const getArtists = (tracks: SpotifyTrack[]) => {
   const artists: { name: string; count: number }[] = [];
 
   tracks.forEach((track) => {
@@ -181,11 +183,20 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
     });
   });
 
-  const uniqueArtists = new Set(artists.map((artist) => artist.name));
-  const topArtists = artists
+  return artists;
+};
+
+const getTopArtists = (artists: { name: string; count: number }[]) =>
+  artists
     .sort((artist1, artist2) => (artist2.count > artist1.count ? 1 : -1))
     .slice(0, 5)
     .map((artist) => artist.name);
+
+const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
+  const duration = getPlaylistDuration(tracks);
+  const artists = getArtists(tracks);
+  const uniqueArtists = new Set(artists.map((artist) => artist.name)).size;
+  const topArtists = getTopArtists(artists);
   const description = data.description.endsWith('.')
     ? data.description
     : `${data.description}.`;
@@ -204,7 +215,7 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
           {[
             `${duration} hours`,
             `${data.tracks.total} tracks`,
-            `${uniqueArtists.size} artists`,
+            `${uniqueArtists} artists`,
           ].join(' · ')}
         </p>
       </div>
