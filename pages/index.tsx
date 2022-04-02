@@ -19,7 +19,10 @@ const formatter = new Intl.ListFormat('en-AU', {
   type: 'conjunction',
 });
 
-const { useGlobalState } = createGlobalState({ interactableNotified: false });
+const { useGlobalState } = createGlobalState({
+  interactableNotified: false,
+  activeTrack: '',
+});
 
 const Track = ({ track }: SpotifyTrack, index: number) => {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -33,6 +36,7 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
   const [interactableNotified, setInteractableNotified] = useGlobalState(
     'interactableNotified'
   );
+  const [activeTrack, setActiveTrack] = useGlobalState('activeTrack');
 
   const play = () => {
     if (audio || !track.preview_url) {
@@ -41,6 +45,8 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
 
     const newAudio = new Audio(track.preview_url);
     newAudio.volume = 0;
+
+    setActiveTrack(track.id);
 
     newAudio
       .play()
@@ -90,6 +96,7 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
     const originalVolume = audio.volume;
 
     setAudio(null);
+    setActiveTrack('');
 
     if (fadeIn) {
       clearInterval(fadeIn);
@@ -116,7 +123,9 @@ const Track = ({ track }: SpotifyTrack, index: number) => {
         <hr className="border-t border-gray-100 dark:border-gray-800" />
       )}
       <div
-        className="relative"
+        className={`relative transition-opacity ${
+          activeTrack && activeTrack !== track.id ? 'opacity-50' : 'opacity-100'
+        }`}
         onMouseOver={play}
         onMouseLeave={stop}
         onFocus={play}
@@ -199,7 +208,7 @@ const Playlist: FC<PlaylistProps> = ({ data, tracks }) => {
       </div>
       <div>
         <a
-          className="inline-flex items-center gap-2 rounded-md bg-[#1DB965] py-3 px-5 text-white"
+          className="inline-flex items-center gap-2 rounded-md bg-[#1DB965] py-3 px-5 text-white transition-all hover:-translate-y-1 hover:bg-[#139E53]"
           href={data.external_urls.spotify}
         >
           <Image src="/spotify.svg" width={16} height={16} alt="" />
